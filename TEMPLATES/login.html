@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — HabitFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:       #0d0a06;
+      --bg2:      #13100a;
+      --card:     rgba(255,255,255,0.04);
+      --border:   rgba(255,200,100,0.12);
+      --border-h: rgba(255,180,50,0.4);
+      --amber:    #f59e0b;
+      --orange:   #ea580c;
+      --rose:     #f43f5e;
+      --gold:     #fbbf24;
+      --grad:     linear-gradient(135deg, #f59e0b 0%, #ea580c 60%, #f43f5e 100%);
+      --text:     #fef3e2;
+      --text2:    rgba(254,243,226,0.55);
+      --text3:    rgba(254,243,226,0.28);
+      --ff:       'Plus Jakarta Sans', sans-serif;
+      --ffd:      'Sora', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body {
+      font-family: var(--ff);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Animated background blobs */
+    .bg-blob {
+      position: fixed; border-radius: 50%;
+      filter: blur(80px); opacity: 0.12; pointer-events: none; z-index: 0;
+      animation: blob-drift ease-in-out infinite;
+    }
+    .blob1 { width: 500px; height: 500px; background: #f59e0b; top: -100px; left: -100px; animation-duration: 12s; }
+    .blob2 { width: 400px; height: 400px; background: #ea580c; bottom: -100px; right: -80px; animation-duration: 16s; animation-delay: -4s; }
+    .blob3 { width: 300px; height: 300px; background: #f43f5e; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-duration: 10s; animation-delay: -7s; }
+    @keyframes blob-drift {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33%      { transform: translate(30px,-20px) scale(1.05); }
+      66%      { transform: translate(-20px,25px) scale(0.97); }
+    }
+
+    /* Grid overlay */
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0;
+      background-image: linear-gradient(rgba(255,180,50,.04) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,180,50,.04) 1px, transparent 1px);
+      background-size: 50px 50px;
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 40%, transparent 80%);
+    }
+
+    .page-wrap {
+      position: relative; z-index: 2;
+      width: 100%; max-width: 440px; padding: 1.5rem;
+    }
+
+    /* Logo above card */
+    .brand {
+      text-align: center; margin-bottom: 1.8rem;
+      animation: fade-down .6s ease both;
+    }
+    .brand-name {
+      font-family: var(--ffd);
+      font-size: 2.2rem; font-weight: 800; letter-spacing: -.03em;
+      background: var(--grad);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .brand-tag {
+      font-size: .78rem; color: var(--text3); letter-spacing: .1em;
+      text-transform: uppercase; margin-top: .3rem;
+    }
+
+    /* Card */
+    .card {
+      background: rgba(13,10,6,.7);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 2.2rem 2rem;
+      backdrop-filter: blur(24px);
+      box-shadow: 0 30px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(255,200,100,.05);
+      animation: fade-up .6s ease both .1s;
+    }
+    .card-title { font-family: var(--ffd); font-size: 1.3rem; font-weight: 700; margin-bottom: .3rem; }
+    .card-sub   { font-size: .85rem; color: var(--text2); margin-bottom: 1.8rem; }
+
+    /* Form */
+    .fgroup { margin-bottom: 1.1rem; }
+    .fgroup label {
+      display: block; font-size: .7rem; letter-spacing: .12em;
+      color: var(--text3); text-transform: uppercase; margin-bottom: .45rem; font-weight: 600;
+    }
+    .fgroup input {
+      width: 100%;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: .85rem 1.1rem;
+      color: var(--text); font-size: .95rem;
+      font-family: var(--ff); outline: none;
+      transition: border-color .25s, background .25s, box-shadow .25s;
+    }
+    .fgroup input:focus {
+      border-color: var(--amber);
+      background: rgba(245,158,11,.04);
+      box-shadow: 0 0 0 3px rgba(245,158,11,.1);
+    }
+    .fgroup input::placeholder { color: var(--text3); }
+
+    .btn {
+      width: 100%; border: none; border-radius: 12px;
+      padding: .95rem; font-size: 1rem; font-weight: 700;
+      font-family: var(--ff); cursor: pointer;
+      background: var(--grad); color: #fff;
+      box-shadow: 0 4px 24px rgba(245,158,11,.25);
+      transition: transform .22s, box-shadow .22s, opacity .22s;
+      margin-top: .4rem; position: relative; overflow: hidden;
+    }
+    .btn::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.15), transparent);
+      opacity: 0; transition: opacity .22s;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(245,158,11,.38); }
+    .btn:hover::after { opacity: 1; }
+    .btn:active { transform: translateY(0); }
+
+    .error {
+      background: rgba(244,63,94,.08); border: 1px solid rgba(244,63,94,.25);
+      border-radius: 10px; padding: .75rem 1rem;
+      color: #fb7185; font-size: .85rem; margin-bottom: 1.2rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+
+    .link {
+      text-align: center; margin-top: 1.4rem;
+      font-size: .88rem; color: var(--text2);
+    }
+    .link a { color: var(--amber); font-weight: 700; transition: color .2s; }
+    .link a:hover { color: var(--gold); }
+
+    /* Divider */
+    .divider {
+      display: flex; align-items: center; gap: 1rem;
+      margin: 1.4rem 0; color: var(--text3); font-size: .75rem;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* Features below card */
+    .features {
+      display: flex; justify-content: center; gap: 1.5rem;
+      margin-top: 1.5rem; flex-wrap: wrap;
+      animation: fade-up .6s ease both .25s;
+    }
+    .feat {
+      display: flex; align-items: center; gap: .4rem;
+      font-size: .75rem; color: var(--text3);
+    }
+    .feat-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); opacity: .6; }
+
+    @keyframes fade-up   { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
+    @keyframes fade-down { from { opacity:0; transform:translateY(-15px); } to { opacity:1; transform:none; } }
+  </style>
+</head>
+<body>
+  <div class="blob1 bg-blob"></div>
+  <div class="blob2 bg-blob"></div>
+  <div class="blob3 bg-blob"></div>
+  <div class="bg-grid"></div>
+
+  <div class="page-wrap">
+    <div class="brand">
+      <div class="brand-name">⚡ HabitFlow</div>
+      <div class="brand-tag">Build habits · Track streaks · Grow daily</div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Welcome back 👋</h2>
+      <p class="card-sub">Sign in to continue your streak</p>
+
+      {% if error %}
+      <div class="error">⚠️ {{ error }}</div>
+      {% endif %}
+
+      <form method="POST" id="loginForm">
+        <div class="fgroup">
+          <label>Username</label>
+          <input type="text" name="username" placeholder="your username" required autofocus/>
+        </div>
+        <div class="fgroup">
+          <label>Password</label>
+          <input type="password" name="password" placeholder="••••••••" required/>
+        </div>
+        <button class="btn" type="submit" id="loginBtn">Sign In →</button>
+      </form>
+
+      <div class="divider">or</div>
+
+      <div class="link">Don't have an account? <a href="/register">Create one free</a></div>
+    </div>
+
+    <div class="features">
+      <div class="feat"><div class="feat-dot"></div>🔥 Streak Tracking</div>
+      <div class="feat"><div class="feat-dot"></div>📊 Progress Analytics</div>
+      <div class="feat"><div class="feat-dot"></div>🏷️ Smart Categories</div>
+    </div>
+  </div>
+
+  <script>
+    // Button loading state
+    document.getElementById('loginForm').addEventListener('submit', function() {
+      const btn = document.getElementById('loginBtn');
+      btn.textContent = 'Signing in...';
+      btn.style.opacity = '.75';
+    });
+  </script>
+</body>
+</html>

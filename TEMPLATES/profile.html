@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#0d0a06"/>
+  <title>Profile — HabitFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0d0a06; --bg2: #141009; --bg3: #1c1510;
+      --card: rgba(255,255,255,.038); --card-h: rgba(255,255,255,.065);
+      --border: rgba(255,200,100,.1); --bh: rgba(255,170,50,.35);
+      --amber: #f59e0b; --orange: #ea580c; --rose: #f43f5e; --gold: #fbbf24;
+      --green: #22c55e; --blue: #3b82f6; --purple: #a855f7;
+      --grad: linear-gradient(135deg,#f59e0b,#ea580c 55%,#f43f5e);
+      --text: #fef3e2; --t2: rgba(254,243,226,.55); --t3: rgba(254,243,226,.28);
+      --ff: 'Plus Jakarta Sans',sans-serif; --ffd: 'Sora',sans-serif;
+      --r: 14px; --r2: 20px; --ease: cubic-bezier(.4,0,.2,1);
+      --bnav: 68px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--ff); background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; padding-bottom: var(--bnav); }
+    a { text-decoration: none; color: inherit; }
+    ::selection { background: rgba(245,158,11,.25); }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: rgba(245,158,11,.25); border-radius: 4px; }
+
+    /* BG */
+    .bg-blob { position: fixed; border-radius: 50%; filter: blur(90px); opacity: .07; pointer-events: none; z-index: 0; animation: bdrift ease-in-out infinite; }
+    .b1 { width:500px;height:500px;background:#f59e0b;top:-150px;left:-100px;animation-duration:18s; }
+    .b2 { width:420px;height:420px;background:#ea580c;bottom:-120px;right:-80px;animation-duration:22s;animation-delay:-8s; }
+    @keyframes bdrift { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(28px,-22px) scale(1.04)} 66%{transform:translate(-22px,28px) scale(.97)} }
+
+    /* TOPBAR */
+    .topbar { position:fixed;top:0;left:0;right:0;z-index:200;height:60px;transition:background .3s,backdrop-filter .3s,box-shadow .3s; }
+    .topbar.scrolled { background:rgba(13,10,6,.9);backdrop-filter:blur(20px);box-shadow:0 1px 0 var(--border); }
+    .topbar-inner { max-width:900px;margin:0 auto;padding:0 1.5rem;height:100%;display:flex;align-items:center;gap:1rem; }
+    .topbar-logo { font-family:var(--ffd);font-size:1.2rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+    .topbar-right { margin-left:auto;display:flex;align-items:center;gap:.9rem; }
+    .btn-back { font-size:.82rem;padding:.38rem .85rem;border-radius:8px;border:1px solid var(--border);color:var(--t2);background:none;cursor:pointer;transition:all .2s;font-family:var(--ff); }
+    .btn-back:hover { border-color:var(--amber);color:var(--amber); }
+    .btn-logout { font-size:.82rem;padding:.38rem .85rem;border-radius:8px;border:1px solid var(--border);color:var(--t2);background:none;cursor:pointer;transition:all .2s;font-family:var(--ff); }
+    .btn-logout:hover { border-color:var(--rose);color:var(--rose); }
+
+    /* BOTTOM NAV */
+    .bottom-nav { position:fixed;bottom:0;left:0;right:0;z-index:200;height:var(--bnav);background:rgba(13,10,6,.95);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:none;align-items:center;justify-content:space-around;padding:0 .5rem;padding-bottom:env(safe-area-inset-bottom); }
+    .bnav-item { display:flex;flex-direction:column;align-items:center;gap:.2rem;font-size:.6rem;font-weight:600;color:var(--t3);cursor:pointer;padding:.5rem .75rem;border-radius:10px;transition:all .22s;text-decoration:none;-webkit-tap-highlight-color:transparent;border:none;background:none;font-family:var(--ff); }
+    .bnav-icon { font-size:1.1rem; }
+    .bnav-item.active,.bnav-item:hover { color:var(--amber);background:rgba(245,158,11,.08); }
+    @media(max-width:640px) { .bottom-nav{display:flex;} .topbar{display:none;} .main{padding-top:1.25rem;} }
+
+    /* MAIN */
+    .main { position:relative;z-index:2;max-width:900px;margin:0 auto;padding:80px 1.25rem 2rem; }
+
+    /* PROFILE HERO */
+    .profile-hero {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r2); padding: 2rem 1.5rem;
+      text-align: center; margin-bottom: 1.2rem;
+      position: relative; overflow: hidden;
+      animation: cin .4s var(--ease) both;
+    }
+    .profile-hero::before { content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad); }
+    .avatar {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--grad); display: flex; align-items: center;
+      justify-content: center; font-family: var(--ffd);
+      font-size: 2rem; font-weight: 800; color: #fff;
+      margin: 0 auto 1rem;
+      box-shadow: 0 0 0 4px rgba(245,158,11,.15), 0 0 30px rgba(245,158,11,.2);
+    }
+    .profile-name { font-family: var(--ffd); font-size: 1.5rem; font-weight: 800; margin-bottom: .3rem; }
+    .profile-joined { font-size: .78rem; color: var(--t3); margin-bottom: 1rem; }
+    .profile-joined span { color: var(--amber); font-weight: 600; }
+
+    /* Streak fire badge */
+    .profile-streak {
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-size: .85rem; font-weight: 800; color: var(--amber);
+      background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.2);
+      padding: .4rem 1rem; border-radius: 100px;
+    }
+
+    /* STATS GRID */
+    .stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: .75rem; margin-bottom: 1.2rem; }
+    @media(max-width:480px) { .stats-grid { grid-template-columns: repeat(3,1fr); } }
+    .stat-card { background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:1rem;text-align:center;animation:cin .4s var(--ease) both; }
+    .stat-num { font-family:var(--ffd);font-size:1.6rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+    .stat-label { font-size:.65rem;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;margin-top:.25rem; }
+
+    /* CATEGORY BREAKDOWN */
+    .section-card { background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:1.2rem 1.4rem;margin-bottom:1.2rem;animation:cin .4s var(--ease) both; }
+    .section-title { font-size:.72rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;display:flex;align-items:center;gap:.45rem; }
+    .section-title::before { content:'';width:3px;height:13px;background:var(--grad);border-radius:3px;display:block; }
+
+    .cat-row { display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem; }
+    .cat-row:last-child { margin-bottom:0; }
+    .cat-icon { font-size:1rem;width:28px;text-align:center;flex-shrink:0; }
+    .cat-info { flex:1;min-width:0; }
+    .cat-label { font-size:.8rem;font-weight:600;margin-bottom:.3rem;display:flex;justify-content:space-between; }
+    .cat-label span:last-child { color:var(--amber);font-size:.72rem; }
+    .cat-track { height:5px;background:rgba(255,255,255,.07);border-radius:5px;overflow:hidden; }
+    .cat-fill  { height:100%;border-radius:5px;transition:width 1s var(--ease); }
+    .fill-health   { background:linear-gradient(90deg,#22c55e,#16a34a); }
+    .fill-learning { background:linear-gradient(90deg,#3b82f6,#1d4ed8); }
+    .fill-work     { background:linear-gradient(90deg,#f59e0b,#d97706); }
+    .fill-personal { background:linear-gradient(90deg,#a855f7,#7c3aed); }
+    .fill-fitness  { background:linear-gradient(90deg,#f43f5e,#e11d48); }
+
+    /* BEST HABITS */
+    .habit-row { display:flex;align-items:center;gap:.75rem;padding:.7rem 0;border-bottom:1px solid var(--border); }
+    .habit-row:last-child { border-bottom:none;padding-bottom:0; }
+    .habit-rank { font-family:var(--ffd);font-size:.9rem;font-weight:800;color:var(--t3);width:20px;flex-shrink:0; }
+    .habit-rank.gold   { color:#fbbf24; }
+    .habit-rank.silver { color:#94a3b8; }
+    .habit-rank.bronze { color:#b45309; }
+    .habit-row-title { flex:1;font-size:.88rem;font-weight:600; }
+    .habit-row-streak { font-size:.75rem;font-weight:800;color:var(--amber);background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.18);padding:.2rem .6rem;border-radius:100px; }
+
+    /* PHOTO UPLOAD */
+    .avatar-wrap { position: relative; width: 90px; margin: 0 auto 1rem; }
+    .avatar {
+      width: 90px; height: 90px; border-radius: 50%;
+      background: var(--grad); display: flex; align-items: center;
+      justify-content: center; font-family: var(--ffd);
+      font-size: 2.2rem; font-weight: 800; color: #fff;
+      box-shadow: 0 0 0 4px rgba(245,158,11,.15), 0 0 30px rgba(245,158,11,.2);
+      overflow: hidden; cursor: pointer;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .avatar-edit {
+      position: absolute; bottom: 2px; right: 2px;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--grad); border: 2px solid var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem; cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,.4);
+      transition: transform .2s;
+    }
+    .avatar-edit:hover { transform: scale(1.15); }
+    .photo-input { display: none; }
+    .upload-hint { font-size: .7rem; color: var(--t3); margin-top: .3rem; }
+
+    /* ACCOUNT SECTION */
+    .account-item { display:flex;align-items:center;justify-content:space-between;padding:.9rem 0;border-bottom:1px solid var(--border); }
+    .account-item:last-child { border-bottom:none; }
+    .account-label { font-size:.85rem;font-weight:600; }
+    .account-val   { font-size:.82rem;color:var(--t3); }
+    .btn-danger { font-size:.8rem;padding:.4rem .9rem;border-radius:8px;border:1px solid rgba(244,63,94,.25);color:#fb7185;background:rgba(244,63,94,.06);cursor:pointer;font-family:var(--ff);transition:all .2s; }
+    .btn-danger:hover { background:rgba(244,63,94,.15);border-color:rgba(244,63,94,.4); }
+
+    @keyframes cin { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+  </style>
+</head>
+<body>
+  <div class="b1 bg-blob"></div>
+  <div class="b2 bg-blob"></div>
+
+  <!-- DESKTOP TOPBAR -->
+  <nav class="topbar" id="topbar">
+    <div class="topbar-inner">
+      <span class="topbar-logo">⚡ HabitFlow</span>
+      <div class="topbar-right">
+        <a href="/" class="btn-back">← Dashboard</a>
+        <a href="/logout" class="btn-logout">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <a href="/" class="bnav-item"><div class="bnav-icon">🏠</div>Home</a>
+    <a href="/" class="bnav-item"><div class="bnav-icon">📊</div>Progress</a>
+    <a href="/" class="bnav-item"><div class="bnav-icon">✅</div>Habits</a>
+    <a href="/profile" class="bnav-item active"><div class="bnav-icon">👤</div>Profile</a>
+    <a href="/logout" class="bnav-item"><div class="bnav-icon">🚪</div>Logout</a>
+  </nav>
+
+  <div class="main">
+
+    <!-- Profile Hero -->
+    <div class="profile-hero">
+      <div class="avatar-wrap">
+        {% if photo %}
+        <div class="avatar" onclick="document.getElementById('photoInput').click()">
+          <img src="/uploads/{{ photo }}" alt="Profile photo"/>
+        </div>
+        {% else %}
+        <div class="avatar" onclick="document.getElementById('photoInput').click()">
+          {{ username[0]|upper }}
+        </div>
+        {% endif %}
+        <div class="avatar-edit" onclick="document.getElementById('photoInput').click()">📷</div>
+        <input type="file" id="photoInput" class="photo-input" accept="image/*" onchange="uploadPhoto(this)"/>
+      </div>
+      <div class="upload-hint">Tap photo to change</div>
+      <div class="profile-name">{{ username }}</div>
+      <div class="profile-joined">Member since <span>{{ joined }}</span></div>
+      {% if best_streak >= 1 %}
+      <div class="profile-streak">🔥 {{ best_streak }} day best streak</div>
+      {% endif %}
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card" style="animation-delay:.05s">
+        <div class="stat-num" data-count="{{ total_habits }}">0</div>
+        <div class="stat-label">Total Habits</div>
+      </div>
+      <div class="stat-card" style="animation-delay:.1s">
+        <div class="stat-num" data-count="{{ total_completions }}">0</div>
+        <div class="stat-label">Completions</div>
+      </div>
+      <div class="stat-card" style="animation-delay:.15s">
+        <div class="stat-num" data-count="{{ best_streak }}">0</div>
+        <div class="stat-label">Best Streak</div>
+      </div>
+    </div>
+
+    <!-- Category Breakdown -->
+    {% if cat_breakdown %}
+    <div class="section-card" style="animation-delay:.2s">
+      <div class="section-title">Category Breakdown</div>
+      {% set cat_icons = {'Health':'🟢','Learning':'🔵','Work':'🟡','Personal':'🟣','Fitness':'🔴'} %}
+      {% for cat, data in cat_breakdown.items() %}
+      <div class="cat-row">
+        <div class="cat-icon">{{ cat_icons.get(cat,'📌') }}</div>
+        <div class="cat-info">
+          <div class="cat-label">
+            <span>{{ cat }}</span>
+            <span>{{ data.done }}/{{ data.total }} done today</span>
+          </div>
+          <div class="cat-track">
+            <div class="cat-fill fill-{{ cat|lower }}" style="width:0%" data-w="{{ data.pct }}"></div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Top Habits by Streak -->
+    {% if top_habits %}
+    <div class="section-card" style="animation-delay:.25s">
+      <div class="section-title">🏆 Top Habits by Streak</div>
+      {% for h in top_habits %}
+      <div class="habit-row">
+        <div class="habit-rank {% if loop.index==1 %}gold{% elif loop.index==2 %}silver{% elif loop.index==3 %}bronze{% endif %}">
+          {% if loop.index==1 %}🥇{% elif loop.index==2 %}🥈{% elif loop.index==3 %}🥉{% else %}{{ loop.index }}{% endif %}
+        </div>
+        <div class="habit-row-title">{{ h.title }}</div>
+        <div class="habit-row-streak">🔥 {{ h.streak }}d</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Account Info -->
+    <div class="section-card" style="animation-delay:.3s">
+      <div class="section-title">Account</div>
+      <div class="account-item">
+        <span class="account-label">Username</span>
+        <span class="account-val">{{ username }}</span>
+      </div>
+      <div class="account-item">
+        <span class="account-label">Member Since</span>
+        <span class="account-val">{{ joined }}</span>
+      </div>
+      <div class="account-item">
+        <span class="account-label">Total Habits</span>
+        <span class="account-val">{{ total_habits }}</span>
+      </div>
+      <div class="account-item">
+        <span class="account-label">Logout</span>
+        <a href="/logout" class="btn-danger">Sign Out</a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Topbar scroll
+    window.addEventListener('scroll', () => {
+      document.getElementById('topbar')?.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    // Counter animation
+    document.querySelectorAll('[data-count]').forEach(el => {
+      const target = +el.dataset.count, start = performance.now(), dur = 1100;
+      (function tick(now) {
+        const p = Math.min((now - start) / dur, 1);
+        el.textContent = Math.round((1 - Math.pow(1 - p, 3)) * target);
+        if (p < 1) requestAnimationFrame(tick); else el.textContent = target;
+      })(start);
+    });
+
+    // Category bar animation
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.querySelectorAll('.cat-fill').forEach(b => b.style.width = (b.dataset.w || 0) + '%');
+      }, 400);
+    });
+
+    // Photo upload
+    function uploadPhoto(input) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+
+      // Show preview instantly
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const avatar = document.querySelector('.avatar');
+        avatar.innerHTML = `<img src="${e.target.result}" alt="Profile photo"/>`;
+      };
+      reader.readAsDataURL(file);
+
+      // Upload to server
+      const formData = new FormData();
+      formData.append('photo', file);
+      fetch('/upload_photo', { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            showToast('✅ Profile photo updated!');
+          } else {
+            showToast('❌ Upload failed: ' + data.error);
+          }
+        })
+        .catch(() => showToast('❌ Upload failed, try again'));
+    }
+
+    // Toast
+    function showToast(msg) {
+      let t = document.getElementById('toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'toast';
+        t.style.cssText = 'position:fixed;bottom:5rem;right:1rem;z-index:9999;background:rgba(13,10,6,.96);border:1px solid rgba(255,170,50,.35);border-radius:12px;padding:.75rem 1.1rem;font-size:.86rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.4);backdrop-filter:blur(16px);transition:all .3s;';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.style.opacity = '1';
+      t.style.transform = 'none';
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => { t.style.opacity = '0'; }, 3000);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register — HabitFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0d0a06; --bg2: #13100a;
+      --border: rgba(255,200,100,0.12); --border-h: rgba(255,180,50,0.4);
+      --amber: #f59e0b; --orange: #ea580c; --rose: #f43f5e; --gold: #fbbf24;
+      --grad: linear-gradient(135deg, #f59e0b 0%, #ea580c 60%, #f43f5e 100%);
+      --text: #fef3e2; --text2: rgba(254,243,226,0.55); --text3: rgba(254,243,226,0.28);
+      --ff: 'Plus Jakarta Sans', sans-serif; --ffd: 'Sora', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--ff); background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+    }
+    .bg-blob { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.12; pointer-events: none; z-index: 0; animation: blob-drift ease-in-out infinite; }
+    .blob1 { width: 500px; height: 500px; background: #ea580c; top: -100px; right: -100px; animation-duration: 14s; }
+    .blob2 { width: 400px; height: 400px; background: #f43f5e; bottom: -80px; left: -80px; animation-duration: 18s; animation-delay: -5s; }
+    .blob3 { width: 280px; height: 280px; background: #f59e0b; top: 40%; right: 20%; animation-duration: 11s; animation-delay: -3s; }
+    @keyframes blob-drift { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(-25px,20px) scale(1.04)} 66%{transform:translate(20px,-25px) scale(0.97)} }
+    .bg-grid { position: fixed; inset: 0; z-index: 0; background-image: linear-gradient(rgba(255,180,50,.04) 1px,transparent 1px), linear-gradient(90deg,rgba(255,180,50,.04) 1px,transparent 1px); background-size: 50px 50px; mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 40%, transparent 80%); }
+    .page-wrap { position: relative; z-index: 2; width: 100%; max-width: 440px; padding: 1.5rem; }
+    .brand { text-align: center; margin-bottom: 1.8rem; animation: fade-down .6s ease both; }
+    .brand-name { font-family: var(--ffd); font-size: 2.2rem; font-weight: 800; letter-spacing: -.03em; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .brand-tag { font-size: .78rem; color: var(--text3); letter-spacing: .1em; text-transform: uppercase; margin-top: .3rem; }
+    .card { background: rgba(13,10,6,.7); border: 1px solid var(--border); border-radius: 24px; padding: 2.2rem 2rem; backdrop-filter: blur(24px); box-shadow: 0 30px 80px rgba(0,0,0,.5); animation: fade-up .6s ease both .1s; }
+    .card-title { font-family: var(--ffd); font-size: 1.3rem; font-weight: 700; margin-bottom: .3rem; }
+    .card-sub { font-size: .85rem; color: var(--text2); margin-bottom: 1.8rem; }
+    .fgroup { margin-bottom: 1.1rem; }
+    .fgroup label { display: block; font-size: .7rem; letter-spacing: .12em; color: var(--text3); text-transform: uppercase; margin-bottom: .45rem; font-weight: 600; }
+    .fgroup input { width: 100%; background: rgba(255,255,255,.04); border: 1px solid var(--border); border-radius: 12px; padding: .85rem 1.1rem; color: var(--text); font-size: .95rem; font-family: var(--ff); outline: none; transition: border-color .25s, background .25s, box-shadow .25s; }
+    .fgroup input:focus { border-color: var(--amber); background: rgba(245,158,11,.04); box-shadow: 0 0 0 3px rgba(245,158,11,.1); }
+    .fgroup input::placeholder { color: var(--text3); }
+    .hint { font-size: .72rem; color: var(--text3); margin-top: .35rem; }
+    .btn { width: 100%; border: none; border-radius: 12px; padding: .95rem; font-size: 1rem; font-weight: 700; font-family: var(--ff); cursor: pointer; background: var(--grad); color: #fff; box-shadow: 0 4px 24px rgba(245,158,11,.25); transition: transform .22s, box-shadow .22s; margin-top: .4rem; position: relative; overflow: hidden; }
+    .btn::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg,rgba(255,255,255,.15),transparent); opacity: 0; transition: opacity .22s; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(245,158,11,.38); }
+    .btn:hover::after { opacity: 1; }
+    .error { background: rgba(244,63,94,.08); border: 1px solid rgba(244,63,94,.25); border-radius: 10px; padding: .75rem 1rem; color: #fb7185; font-size: .85rem; margin-bottom: 1.2rem; }
+    .divider { display: flex; align-items: center; gap: 1rem; margin: 1.4rem 0; color: var(--text3); font-size: .75rem; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .link { text-align: center; margin-top: 1.4rem; font-size: .88rem; color: var(--text2); }
+    .link a { color: var(--amber); font-weight: 700; }
+
+    /* Password strength bar */
+    .strength-wrap { margin-top: .5rem; }
+    .strength-bar { height: 3px; border-radius: 3px; background: rgba(255,255,255,.07); overflow: hidden; margin-bottom: .3rem; }
+    .strength-fill { height: 100%; border-radius: 3px; width: 0; transition: width .4s, background .4s; }
+    .strength-label { font-size: .68rem; color: var(--text3); }
+
+    /* Benefits list */
+    .benefits { display: flex; flex-direction: column; gap: .5rem; margin: 1.5rem 0 1.8rem; }
+    .benefit { display: flex; align-items: center; gap: .6rem; font-size: .82rem; color: var(--text2); }
+    .benefit-icon { font-size: .9rem; }
+
+    @keyframes fade-up   { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
+    @keyframes fade-down { from { opacity:0; transform:translateY(-15px); } to { opacity:1; transform:none; } }
+  </style>
+</head>
+<body>
+  <div class="blob1 bg-blob"></div>
+  <div class="blob2 bg-blob"></div>
+  <div class="blob3 bg-blob"></div>
+  <div class="bg-grid"></div>
+
+  <div class="page-wrap">
+    <div class="brand">
+      <div class="brand-name">⚡ HabitFlow</div>
+      <div class="brand-tag">Your streak starts today</div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Create your account 🚀</h2>
+      <p class="card-sub">Free forever. No credit card needed.</p>
+
+      <div class="benefits">
+        <div class="benefit"><span class="benefit-icon">🔥</span> Daily streak tracking & reminders</div>
+        <div class="benefit"><span class="benefit-icon">📊</span> Progress analytics dashboard</div>
+        <div class="benefit"><span class="benefit-icon">🏷️</span> Smart habit categories & filters</div>
+      </div>
+
+      {% if error %}
+      <div class="error">⚠️ {{ error }}</div>
+      {% endif %}
+
+      <form method="POST" id="regForm">
+        <div class="fgroup">
+          <label>Username</label>
+          <input type="text" name="username" id="usernameInput" placeholder="choose a username" required autofocus/>
+          <p class="hint">Lowercase letters and numbers only</p>
+        </div>
+        <div class="fgroup">
+          <label>Password</label>
+          <input type="password" name="password" id="passInput" placeholder="min 4 characters" required/>
+          <div class="strength-wrap">
+            <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+            <span class="strength-label" id="strengthLabel">Enter a password</span>
+          </div>
+        </div>
+        <button class="btn" type="submit" id="regBtn">Create Free Account →</button>
+      </form>
+
+      <div class="divider">already have an account?</div>
+      <div class="link"><a href="/login">Sign in here</a></div>
+    </div>
+  </div>
+
+  <script>
+    // Password strength meter
+    const passInput     = document.getElementById('passInput');
+    const strengthFill  = document.getElementById('strengthFill');
+    const strengthLabel = document.getElementById('strengthLabel');
+
+    passInput.addEventListener('input', function() {
+      const val = this.value;
+      let score = 0;
+      if (val.length >= 4)  score++;
+      if (val.length >= 8)  score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+
+      const configs = [
+        { w: '0%',   bg: 'transparent', label: 'Enter a password' },
+        { w: '25%',  bg: '#ef4444',     label: 'Weak' },
+        { w: '50%',  bg: '#f59e0b',     label: 'Fair' },
+        { w: '75%',  bg: '#3b82f6',     label: 'Good' },
+        { w: '100%', bg: '#10b981',     label: '💪 Strong' },
+      ];
+      const c = configs[Math.min(score, 4)];
+      strengthFill.style.width      = c.w;
+      strengthFill.style.background = c.bg;
+      strengthLabel.textContent     = c.label;
+      strengthLabel.style.color     = c.bg;
+    });
+
+    // Loading state
+    document.getElementById('regForm').addEventListener('submit', function() {
+      const btn = document.getElementById('regBtn');
+      btn.textContent = 'Creating account...';
+      btn.style.opacity = '.75';
+    });
+  </script>
+</body>
+</html>
