@@ -64,3 +64,25 @@ Category breakdown — how many habits per category and today's completion rate 
 
 Exports full habit data to a styled .xlsx file
 Two sheets: Summary (all habits with stats) and Completion History (every check-in date)
+
+*The Path Should Look Like*
+📁 Project Structure
+Habit-Flow/
+├── app.py              # Flask backend — all routes & logic
+├── habits.json         # Habit data stored per user
+├── users.json          # User accounts & profile info
+├── requirements.txt    # Flask, openpyxl, gunicorn
+├── .gitignore
+└── templates/
+    ├── index.html       # Main dashboard
+    ├── login.html       # Login page
+    ├── register.html    # Registration page
+    ├── profile.html     # User profile
+    ├── achievements.html# Badges page
+    └── calendar.html    # Per-habit calendar view
+
+🚀 How to Run
+bash
+pip install -r requirements.txt
+python app.py
+# Visit http://localhost:5000
