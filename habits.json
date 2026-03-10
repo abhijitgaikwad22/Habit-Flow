@@ -1,0 +1,52 @@
+{
+  "abhijit": [
+    {
+      "id": 1,
+      "title": "Read 20 Pages",
+      "category": "Personal",
+      "frequency": "Daily",
+      "completions": [
+        "2026-03-09",
+        "2026-03-10"
+      ],
+      "created": "2026-03-09"
+    },
+    {
+      "id": 2,
+      "title": "drink 8 glass water",
+      "category": "Health",
+      "frequency": "Daily",
+      "completions": [
+        "2026-03-09",
+        "2026-03-10"
+      ],
+      "created": "2026-03-09"
+    }
+  ],
+  "gayatri": [
+    {
+      "id": 1,
+      "title": "Drink 8 glass of water",
+      "category": "Health",
+      "frequency": "Daily",
+      "note": "To maintain Hydration",
+      "goal": "To make the skin glowing",
+      "completions": [
+        "2026-03-09"
+      ],
+      "created": "2026-03-09"
+    },
+    {
+      "id": 2,
+      "title": "To go to gym",
+      "category": "Fitness",
+      "frequency": "Daily",
+      "note": "I like it",
+      "goal": "Make the strong body",
+      "completions": [
+        "2026-03-09"
+      ],
+      "created": "2026-03-09"
+    }
+  ]
+}
